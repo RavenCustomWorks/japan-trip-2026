@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗾 Япония 2026</title>
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #151827;
+    --card: #1c2035;
+    --card2: #232843;
+    --accent: #e84a6f;
+    --accent2: #f5a623;
+    --accent3: #4ecdc4;
+    --text: #eef0f8;
+    --muted: #8890b0;
+    --border: #2a3050;
+    --success: #4ecdc4;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,26,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 16px; overflow-x: auto; scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex-shrink: 0; background: none; border: 1px solid var(--border);
+    color: var(--muted); border-radius: 20px; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .nav-btn.active, .nav-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a0a2e 0%, #16213e 40%, #0f3460 70%, #e84a6f22 100%);
+    padding: 48px 20px 36px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '🗾'; font-size: 120px; position: absolute;
+    right: -20px; top: -10px; opacity: 0.08; pointer-events: none;
+  }
+  .hero-flag { font-size: 48px; margin-bottom: 12px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(90deg, #fff, #e84a6f, #f5a623); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub { color: var(--muted); margin-top: 8px; font-size: 15px; }
+  .hero-dates {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 24px; padding: 8px 20px; margin-top: 16px; font-size: 14px;
+  }
+  .hero-dates span { color: var(--accent2); font-weight: 700; }
+  .hero-stats { display: flex; justify-content: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--accent3); }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* SECTIONS */
+  .section { display: none; padding: 20px 16px 40px; max-width: 860px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .card:hover { border-color: var(--accent); transition: border-color .2s; }
+
+  /* ITINERARY */
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+  .day-header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    cursor: pointer; user-select: none; transition: background .15s;
+  }
+  .day-header:hover { background: var(--card2); }
+  .day-num { background: var(--accent); color: #fff; border-radius: 10px; padding: 4px 12px; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+  .day-city { font-weight: 600; flex: 1; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-chevron { color: var(--muted); transition: transform .25s; font-size: 18px; }
+  .day-card.open .day-chevron { transform: rotate(180deg); }
+  .day-body { display: none; padding: 0 18px 14px; }
+  .day-card.open .day-body { display: block; }
+  .event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .event:last-child { border-bottom: none; }
+  .event-icon { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
+  .event-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .event-info p { font-size: 12px; color: var(--muted); }
+  .map-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--accent3); text-decoration: none; margin-top: 4px; }
+  .map-link:hover { text-decoration: underline; }
+
+  /* CITIES */
+  .cities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .city-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; position: relative; overflow: hidden; transition: transform .2s, border-color .2s;
+  }
+  .city-card:hover { transform: translateY(-3px); border-color: var(--accent2); }
+  .city-emoji { font-size: 40px; margin-bottom: 10px; }
+  .city-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .city-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .city-tag { display: inline-block; background: var(--accent)22; color: var(--accent); border-radius: 10px; padding: 2px 8px; font-size: 11px; margin-top: 8px; margin-right: 4px; }
+  .city-nights { position: absolute; top: 14px; right: 14px; font-size: 12px; color: var(--muted); }
+
+  /* CHECKLIST */
+  .check-section { margin-bottom: 24px; }
+  .check-section-title { font-size: 14px; font-weight: 700; color: var(--accent2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; cursor: pointer; }
+  .check-item input[type=checkbox] { display: none; }
+  .check-box {
+    width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all .2s; margin-top: 1px;
+  }
+  .check-item.done .check-box { background: var(--success); border-color: var(--success); }
+  .check-item.done .check-box::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 800; }
+  .check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
+  .check-text { font-size: 14px; line-height: 1.4; }
+  .progress-bar { background: var(--border); border-radius: 10px; height: 8px; margin-bottom: 20px; }
+  .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--accent3), var(--success)); transition: width .4s; }
+  .progress-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+
+  /* BUDGET */
+  .budget-total { text-align: center; padding: 24px; background: linear-gradient(135deg, var(--card), var(--card2)); border-radius: var(--radius); margin-bottom: 20px; border: 1px solid var(--border); }
+  .budget-total .amount { font-size: 42px; font-weight: 800; color: var(--accent2); }
+  .budget-total .currency { font-size: 20px; color: var(--muted); }
+  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media(max-width:480px){ .budget-grid { grid-template-columns: 1fr; } }
+  .budget-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .budget-item-icon { font-size: 24px; margin-bottom: 6px; }
+  .budget-item-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .budget-item-amount { font-size: 20px; font-weight: 700; }
+  .budget-bar-wrap { margin-top: 6px; }
+  .budget-bar { height: 4px; border-radius: 4px; background: var(--border); }
+  .budget-bar-fill { height: 100%; border-radius: 4px; }
+  .exchange { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .exchange h3 { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .rate-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .rate-row:last-child { border-bottom: none; }
+  .rate-val { font-weight: 600; color: var(--accent3); }
+
+  /* NOTES */
+  .notes-area {
+    width: 100%; min-height: 160px; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: 14px; padding: 14px;
+    resize: vertical; font-family: inherit; line-height: 1.6;
+  }
+  .notes-area:focus { outline: none; border-color: var(--accent3); }
+  .notes-saved { font-size: 12px; color: var(--success); margin-top: 6px; display: none; }
+  .notes-grid { display: grid; gap: 14px; margin-bottom: 20px; }
+  .note-card { background: var(--card); border-left: 3px solid var(--accent3); border-radius: 0 12px 12px 0; padding: 14px; }
+  .note-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .note-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* MAPS */
+  .maps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .map-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px; text-decoration: none; color: var(--text); transition: all .2s; display: block;
+  }
+  .map-card:hover { border-color: var(--accent3); transform: translateY(-2px); }
+  .map-card-icon { font-size: 32px; margin-bottom: 10px; }
+  .map-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .map-card p { font-size: 12px; color: var(--muted); }
+  .map-card .arrow { color: var(--accent3); font-size: 18px; margin-top: 8px; }
+
+  /* WEATHER WIDGET */
+  .weather-strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 20px; scrollbar-width: none; }
+  .weather-strip::-webkit-scrollbar { display: none; }
+  .w-day { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; flex-shrink: 0; text-align: center; }
+  .w-day .wd { font-size: 11px; color: var(--muted); }
+  .w-day .wi { font-size: 22px; margin: 4px 0; }
+  .w-day .wt { font-size: 14px; font-weight: 700; }
+
+  /* UTIL */
+  .badge { display: inline-block; border-radius: 8px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+  .badge-accent { background: var(--accent)33; color: var(--accent); }
+  .badge-green { background: var(--success)33; color: var(--success); }
+  .badge-yellow { background: var(--accent2)33; color: var(--accent2); }
+
+  /* RESPONSIVE */
+  @media(max-width: 600px) {
+    .hero { padding: 32px 16px 28px; }
+    .hero-stats { gap: 16px; }
+    .stat-num { font-size: 22px; }
+    .cities-grid { grid-template-columns: 1fr; }
+    .maps-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <button class="nav-btn active" onclick="showSection('home')">🏠 Главная</button>
+  <button class="nav-btn" onclick="showSection('itinerary')">📅 Маршрут</button>
+  <button class="nav-btn" onclick="showSection('cities')">🏙️ Города</button>
+  <button class="nav-btn" onclick="showSection('checklist')">✅ Документы</button>
+  <button class="nav-btn" onclick="showSection('budget')">💴 Бюджет</button>
+  <button class="nav-btn" onclick="showSection('notes')">📝 Заметки</button>
+  <button class="nav-btn" onclick="showSection('maps')">🗺️ Карты</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-flag">🇯🇵</div>
+  <h1>Япония 2026</h1>
+  <p class="hero-sub">Путешествие мечты — Токио · Киото · Осака · Хиросима</p>
+  <div class="hero-dates">📆 <span>12 — 28 июля 2026</span> · 17 дней</div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Города</div></div>
+    <div class="stat"><div class="stat-num">17</div><div class="stat-label">Дней</div></div>
+    <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Активностей</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Воспоминаний</div></div>
+  </div>
+</div>
+
+<!-- =========== SECTIONS =========== -->
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="section-title">🌸 Обзор поездки</div>
+
+  <div class="weather-strip">
+    <div class="w-day"><div class="wd">12 июл</div><div class="wi">☀️</div><div class="wt">32°C</div></div>
+    <div class="w-day"><div class="wd">13 июл</div><div class="wi">⛅</div><div class="wt">30°C</div></div>
+    <div class="w-day"><div class="wd">14 июл</div><div class="wi">🌦️</div><div class="wt">28°C</div></div>
+    <div class="w-day"><div class="wd">15 июл</div><div class="wi">☀️</div><div class="wt">33°C</div></div>
+    <div class="w-day"><div class="wd">16 июл</div><div class="wi">☀️</div><div class="wt">34°C</div></div>
+    <div class="w-day"><div class="wd">17 июл</div><div class="wi">⛅</div><div class="wt">31°C</div></div>
+    <div class="w-day"><div class="wd">18 июл</div><div class="wi">🌧️</div><div class="wt">27°C</div></div>
+    <div class="w-day"><div class="wd">19 июл</div><div class="wi">⛅</div><div class="wt">29°C</div></div>
+    <div class="w-day"><div class="wd">20 июл</div><div class="wi">☀️</div><div class="wt">32°C</div></div>
+    <div class="w-day"><div class="wd">21 июл</div><div class="wi">☀️</div><div class="wt">33°C</div></div>
+  </div>
+
+  <div class="card" style="border-left: 3px solid var(--accent)">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">📌 Быстрая навигация</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+      <button onclick="showSection('itinerary')" style="background:var(--accent)22;border:1px solid var(--accent);color:var(--accent);padding:8px 14px;border-radius:12px;cursor:pointer;font-size:13px;">📅 Маршрут</button>
+      <button onclick="showSection('checklist')" style="background:var(--success)22;border:1px solid var(--success);color:var(--success);padding:8px 14px;border-radius:12px;cursor:pointer;font-size:13px;">✅ Чек-лист</button>
+      <button onclick="showSection('budget')" style="background:var(--accent2)22;border:1px solid var(--accent2);color:var(--accent2);padding:8px 14px;border-radius:12px;cursor:pointer;font-size:13px;">💴 Бюджет</button>
+      <button onclick="showSection('maps')" style="background:var(--accent3)22;border:1px solid var(--accent3);color:var(--accent3);padding:8px 14px;border-radius:12px;cursor:pointer;font-size:13px;">🗺️ Карты</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:12px;">🗓️ Маршрут одним взглядом</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:10px;"><div style="background:var(--accent);border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;flex-shrink:0">12–17</div><div>✈️ Перелёт → <strong>Токио</strong> (Синдзюку, Асакуса, Акихабара, Одайба)</div></div>
+      <div style="display:flex;align-items:center;gap:10px;"><div style="background:var(--accent2)99;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;flex-shrink:0">18–21</div><div>🚄 Синкансэн → <strong>Киото</strong> (Арасияма, Фусими Инари, Гион)</div></div>
+      <div style="display:flex;align-items:center;gap:10px;"><div style="background:var(--accent3)99;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;flex-shrink:0">22–25</div><div>🚄 Синкансэн → <strong>Осака</strong> (Дотонбори, замок, Нара)</div></div>
+      <div style="display:flex;align-items:center;gap:10px;"><div style="background:#9b59b699;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;flex-shrink:0">26–28</div><div>🚄 → <strong>Хиросима</strong> → мемориал → ✈️ домой</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:10px;">⚡ Важные напоминания</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;">
+      <div>🎫 JR Pass — активировать в аэропорту Нарита/Ханэда</div>
+      <div>💳 Снять иены в аэропорту (ATM 7-Eleven)</div>
+      <div>📱 Арендовать Wi-Fi роутер или купить SIM</div>
+      <div>🚇 Купить карту Suica/Pasmo для метро</div>
+      <div>🌡️ Июль — жарко (30–35°C), взять лёгкую одежду</div>
+      <div>👟 Много ходьбы — удобная обувь обязательна</div>
+    </div>
+  </div>
+</div>
+
+<!-- ITINERARY -->
+<div id="itinerary" class="section">
+  <div class="section-title">📅 Маршрут по дням</div>
+  <div id="days-container"></div>
+</div>
+
+<!-- CITIES -->
+<div id="cities" class="section">
+  <div class="section-title">🏙️ Города</div>
+  <div class="cities-grid">
+    <div class="city-card">
+      <div class="city-nights">5 ночей</div>
+      <div class="city-emoji">🗼</div>
+      <div class="city-name">Токио</div>
+      <div class="city-desc">Мегаполис будущего — неоновые огни, аниме, технологии и традиции. Самый населённый город планеты.</div>
+      <div><span class="city-tag">Синдзюку</span><span class="city-tag">Асакуса</span><span class="city-tag">Сибуя</span></div>
+      <a href="https://maps.app.goo.gl/XKSXe8V9rn5xynFo9" target="_blank" class="map-link">📍 Открыть на карте →</a>
+    </div>
+    <div class="city-card">
+      <div class="city-nights">4 ночи</div>
+      <div class="city-emoji">⛩️</div>
+      <div class="city-name">Киото</div>
+      <div class="city-desc">Древняя столица Японии. 1600+ храмов и святилищ, гейши Гиона, бамбуковые рощи Арасиямы.</div>
+      <div><span class="city-tag">Арасияма</span><span class="city-tag">Гион</span><span class="city-tag">Нисики</span></div>
+      <a href="https://maps.app.goo.gl/UiRqRvqKrpCvkmaN9" target="_blank" class="map-link">📍 Открыть на карте →</a>
+    </div>
+    <div class="city-card">
+      <div class="city-nights">4 ночи</div>
+      <div class="city-emoji">🦀</div>
+      <div class="city-name">Осака</div>
+      <div class="city-desc">Гастрономическая столица Японии. Уличная еда, ночная жизнь, замок Осака и Дотонбори.</div>
+      <div><span class="city-tag">Дотонбори</span><span class="city-tag">Нара</span><span class="city-tag">Такояки</span></div>
+      <a href="https://maps.app.goo.gl/g7tBdYZvXPnV5t1m8" target="_blank" class="map-link">📍 Открыть на карте →</a>
+    </div>
+    <div class="city-card">
+      <div class="city-nights">2 ночи</div>
+      <div class="city-emoji">🕊️</div>
+      <div class="city-name">Хиросима</div>
+      <div class="city-desc">Город мира и возрождения. Мемориальный парк, остров Миядзима с тории в море.</div>
+      <div><span class="city-tag">Мемориал</span><span class="city-tag">Миядзима</span><span class="city-tag">Тории</span></div>
+      <a href="https://maps.app.goo.gl/8TREt9VG4W7KaBqB6" target="_blank" class="map-link">📍 Открыть на карте →</a>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div id="checklist" class="section">
+  <div class="section-title">✅ Чек-лист документов</div>
+  <div class="progress-label" id="progress-label">Готово: 0 / 0</div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div id="checklist-container"></div>
+</div>
+
+<!-- BUDGET -->
+<div id="budget" class="section">
+  <div class="section-title">💴 Бюджет поездки</div>
+  <div class="budget-total">
+    <div class="currency">Общий бюджет</div>
+    <div class="amount">350 000 ₽</div>
+    <div style="color:var(--muted);font-size:13px;margin-top:4px;">≈ 3 500 USD · ≈ 500 000 ¥</div>
+  </div>
+  <div class="budget-grid">
+    <div class="budget-item">
+      <div class="budget-item-icon">✈️</div>
+      <div class="budget-item-label">Авиабилеты (туда-обратно)</div>
+      <div class="budget-item-amount" style="color:var(--accent)">120 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:34%;background:var(--accent)"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🏨</div>
+      <div class="budget-item-label">Жильё (16 ночей)</div>
+      <div class="budget-item-amount" style="color:var(--accent2)">80 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:23%;background:var(--accent2)"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🚄</div>
+      <div class="budget-item-label">JR Pass + Транспорт</div>
+      <div class="budget-item-amount" style="color:var(--accent3)">45 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:13%;background:var(--accent3)"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🍜</div>
+      <div class="budget-item-label">Еда и рестораны</div>
+      <div class="budget-item-amount" style="color:#a29bfe">40 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:11%;background:#a29bfe"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🎫</div>
+      <div class="budget-item-label">Достопримечательности</div>
+      <div class="budget-item-amount" style="color:#fd79a8">25 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:7%;background:#fd79a8"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🛍️</div>
+      <div class="budget-item-label">Шопинг и сувениры</div>
+      <div class="budget-item-amount" style="color:#55efc4">25 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:7%;background:#55efc4"></div></div></div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-icon">🏥</div>
+      <div class="budget-item-label">Страховка + непредвиденное</div>
+      <div class="budget-item-amount" style="color:#fdcb6e">15 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:4%;background:#fdcb6e"></div></div></div>
+    </div>
+    <div class="budget-item" style="border-color:var(--accent3)">
+      <div class="budget-item-icon">📱</div>
+      <div class="budget-item-label">SIM/Wi-Fi + прочее</div>
+      <div class="budget-item-amount" style="color:var(--accent3)">5 000 ₽</div>
+      <div class="budget-bar-wrap"><div class="budget-bar"><div class="budget-bar-fill" style="width:1%;background:var(--accent3)"></div></div></div>
+    </div>
+  </div>
+  <div class="exchange">
+    <h3>💱 Курсы обмена (ориентир)</h3>
+    <div class="rate-row"><span>1 USD</span><span class="rate-val">≈ 143 ¥</span></div>
+    <div class="rate-row"><span>1 RUB</span><span class="rate-val">≈ 1.44 ¥</span></div>
+    <div class="rate-row"><span>1 EUR</span><span class="rate-val">≈ 156 ¥</span></div>
+    <div class="rate-row"><span>1 000 ¥</span><span class="rate-val">≈ 694 ₽</span></div>
+    <div class="rate-row"><span>10 000 ¥</span><span class="rate-val">≈ 6 940 ₽</span></div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div id="notes" class="section">
+  <div class="section-title">📝 Заметки</div>
+  <div class="notes-grid">
+    <div class="note-card">
+      <h4>🍣 Рестораны в списке</h4>
+      <p>Токио: Ichiran Ramen (Синдзюку), Tsukiji Market утром. Осака: Курокомон рынок, Дотонбори ночью.</p>
+    </div>
+    <div class="note-card" style="border-color:var(--accent2)">
+      <h4>🚇 Советы по метро</h4>
+      <p>Карта Suica работает в Токио, Осаке и на большинстве линий. JR Pass — только для JR-линий. Google Maps → «Транзит» отлично работает в Японии.</p>
+    </div>
+    <div class="note-card" style="border-color:var(--accent)">
+      <h4>📱 Нужные приложения</h4>
+      <p>Google Translate (офлайн JP), Japan Official Travel App, Hyperdia (расписание), Google Maps, Suica app.</p>
+    </div>
+  </div>
+  <div style="margin-bottom:8px;font-size:14px;font-weight:600;">✏️ Личные заметки</div>
+  <textarea class="notes-area" id="personal-notes" placeholder="Запишите здесь свои мысли, идеи, адреса, номера брони...&#10;&#10;Всё сохраняется автоматически в браузере."></textarea>
+  <div class="notes-saved" id="notes-saved">✓ Сохранено</div>
+</div>
+
+<!-- MAPS -->
+<div id="maps" class="section">
+  <div class="section-title">🗺️ Полезные карты</div>
+  <div class="maps-grid">
+    <a href="https://maps.app.goo.gl/XKSXe8V9rn5xynFo9" target="_blank" class="map-card">
+      <div class="map-card-icon">🗼</div>
+      <h3>Токио — обзор</h3>
+      <p>Центральные районы города</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/zKLm8eRfJV8wRcxF7" target="_blank" class="map-card">
+      <div class="map-card-icon">🚇</div>
+      <h3>Метро Токио</h3>
+      <p>Схема линий и станций</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/UiRqRvqKrpCvkmaN9" target="_blank" class="map-card">
+      <div class="map-card-icon">⛩️</div>
+      <h3>Киото</h3>
+      <p>Храмы, Гион, Арасияма</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/g7tBdYZvXPnV5t1m8" target="_blank" class="map-card">
+      <div class="map-card-icon">🦀</div>
+      <h3>Осака — Дотонбори</h3>
+      <p>Ночная жизнь и еда</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/8TREt9VG4W7KaBqB6" target="_blank" class="map-card">
+      <div class="map-card-icon">🕊️</div>
+      <h3>Хиросима</h3>
+      <p>Мемориальный парк</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/qcAEdRnuME3ViqY46" target="_blank" class="map-card">
+      <div class="map-card-icon">🦌</div>
+      <h3>Нара — олени</h3>
+      <p>Парк и храм Тодай-дзи</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/xnWzx5X4q3AhNPgD7" target="_blank" class="map-card">
+      <div class="map-card-icon">🎋</div>
+      <h3>Арасияма</h3>
+      <p>Бамбуковая роща</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/kB9xLJxvW9v7FN4J8" target="_blank" class="map-card">
+      <div class="map-card-icon">⛩️</div>
+      <h3>Фусими Инари</h3>
+      <p>Тысячи красных тории</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://www.rome2rio.com/map/Tokyo/Kyoto" target="_blank" class="map-card">
+      <div class="map-card-icon">🚄</div>
+      <h3>Синкансэн маршруты</h3>
+      <p>Расписания и билеты</p>
+      <div class="arrow">→</div>
+    </a>
+    <a href="https://maps.app.goo.gl/6aGzA3JBrZXY4gTy5" target="_blank" class="map-card">
+      <div class="map-card-icon">⛩️</div>
+      <h3>Остров Миядзима</h3>
+      <p>Тории в море, Ицукусима</p>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active');
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ===== ITINERARY DATA =====
+const days = [
+  { day:1, date:'12 июл', city:'✈️ Перелёт', events:[
+    {icon:'🛫',title:'Вылет из Москвы (Шереметьево)',desc:'Стыковка в Дубае / Сеуле'},
+    {icon:'📋',title:'Онлайн-регистрация заранее',desc:'Скачать посадочные в приложение авиакомпании'}
+  ]},
+  { day:2, date:'13 июл', city:'🛬 Токио — прибытие', events:[
+    {icon:'🛬',title:'Прилёт в Нарита / Ханэда',desc:'Паспортный контроль, обмен валюты'},
+    {icon:'🎫',title:'Активировать JR Pass',desc:'В стойке обмена в аэропорту'},
+    {icon:'🚆',title:'Наритаэкспресс в Синдзюку',desc:'~90 мин, по JR Pass',map:'https://maps.app.goo.gl/XKSXe8V9rn5xynFo9'},
+    {icon:'🏨',title:'Заселение в отель',desc:'Синдзюку / Асакуса'},
+    {icon:'🌃',title:'Вечерняя прогулка по Синдзюку',desc:'Кабуки-тё, огни города'}
+  ]},
+  { day:3, date:'14 июл', city:'🗼 Токио — центр', events:[
+    {icon:'🗼',title:'Токийская башня',desc:'Утром, пока нет толп',map:'https://maps.app.goo.gl/5n1HwkPCB89aaEL46'},
+    {icon:'🌸',title:'Парк Уэно',desc:'Музеи, пруд с лодками'},
+    {icon:'⛩️',title:'Храм Сэнсо-дзи в Асакусе',desc:'Старейший буддийский храм Токио',map:'https://maps.app.goo.gl/hJLTtYfwS7GnB9Ak6'},
+    {icon:'🛍️',title:'Торговая улица Накамисэ',desc:'Сувениры, wagashi (японские сладости)'}
+  ]},
+  { day:4, date:'15 июл', city:'🎮 Токио — Акихабара & Сибуя', events:[
+    {icon:'🎮',title:'Акихабара — электроника и аниме',desc:'Небольшой торг на рынке',map:'https://maps.app.goo.gl/WvkFW8rBLsq8fvK46'},
+    {icon:'🐕',title:'Кошачьи / собачьи кафе',desc:'В районе Акихабары'},
+    {icon:'🚦',title:'Перекрёсток Сибуя',desc:'Самый известный переход в мире',map:'https://maps.app.goo.gl/2RGNiPEoQBBp3PbY8'},
+    {icon:'🌆',title:'Смотровая Токийский скайтри',desc:'Лучший вид на город',map:'https://maps.app.goo.gl/tJRGLM9KBbDcTPbB7'}
+  ]},
+  { day:5, date:'16 июл', city:'🏯 Токио — Одайба & Харадзюку', events:[
+    {icon:'🤖',title:'Одайба — TeamLab Borderless',desc:'Иммерсивное цифровое искусство',map:'https://maps.app.goo.gl/nfYDFUb5MScr6bVP7'},
+    {icon:'👘',title:'Харадзюку — улица Такэсита',desc:'Японская субкультура и мода'},
+    {icon:'🌳',title:'Святилище Мэйдзи',desc:'Лес в центре города',map:'https://maps.app.goo.gl/uGkv1BU91NKoHkMN6'}
+  ]},
+  { day:6, date:'17 июл', city:'🗻 Фудзи (дневная поездка)', events:[
+    {icon:'🗻',title:'Гора Фудзи',desc:'Выезд на автобусе или ж/д, 5-я станция',map:'https://maps.app.goo.gl/iH8t4bJmApV5e8C59'},
+    {icon:'🛶',title:'Фудзи-Пять Озёр',desc:'Вид на Фудзи над водой'},
+    {icon:'🌙',title:'Возврат в Токио вечером',desc:''}
+  ]},
+  { day:7, date:'18 июл', city:'🚄 Токио → Киото', events:[
+    {icon:'🚄',title:'Синкансэн Нозоми',desc:'Токио → Киото, ~2ч 15мин, по JR Pass'},
+    {icon:'🏨',title:'Заселение в Киото',desc:'Рекомендуется район Гион или центр'},
+    {icon:'🎋',title:'Вечером — Гион',desc:'Архитектура эпохи Эдо, шанс увидеть гейшу',map:'https://maps.app.goo.gl/UiRqRvqKrpCvkmaN9'}
+  ]},
+  { day:8, date:'19 июл', city:'⛩️ Киото — Фусими Инари', events:[
+    {icon:'⛩️',title:'Фусими Инари — тысячи тории',desc:'Выйти в 6:00 до толп',map:'https://maps.app.goo.gl/kB9xLJxvW9v7FN4J8'},
+    {icon:'🏯',title:'Замок Нидзё',desc:'Резиденция сёгунов Токугава',map:'https://maps.app.goo.gl/a3kCMFjTJLt5Xvom7'},
+    {icon:'🛒',title:'Рынок Нисики — "Кухня Киото"',desc:'Дегустация местной еды'}
+  ]},
+  { day:9, date:'20 июл', city:'🎋 Арасияма', events:[
+    {icon:'🎋',title:'Бамбуковая роща Арасияма',desc:'Утром, без людей',map:'https://maps.app.goo.gl/xnWzx5X4q3AhNPgD7'},
+    {icon:'🐒',title:'Гора обезьян Арасияма',desc:'Японские макаки'},
+    {icon:'⛩️',title:'Святилище Тэнрю-дзи',desc:'Сад с видом на горы'},
+    {icon:'🚢',title:'Прогулка на лодке по реке Ои',desc:''}
+  ]},
+  { day:10, date:'21 июл', city:'🕌 Киото — Золотой павильон', events:[
+    {icon:'🌅',title:'Кинкаку-дзи (Золотой павильон)',desc:'Утром до открытия толп',map:'https://maps.app.goo.gl/UiRqRvqKrpCvkmaN9'},
+    {icon:'🎍',title:'Холм Хигасияма',desc:'Исторические улочки Саннэн-дзака'},
+    {icon:'🍵',title:'Чайная церемония',desc:'Бронировать заранее'}
+  ]},
+  { day:11, date:'22 июл', city:'🚄 Киото → Осака', events:[
+    {icon:'🚄',title:'Шинкансэн в Осаку',desc:'~15 мин, по JR Pass'},
+    {icon:'🏯',title:'Замок Осака',desc:'Символ города',map:'https://maps.app.goo.gl/g7tBdYZvXPnV5t1m8'},
+    {icon:'🌃',title:'Дотонбори вечером',desc:'Гликогэн-ман, еда, неон',map:'https://maps.app.goo.gl/g7tBdYZvXPnV5t1m8'}
+  ]},
+  { day:12, date:'23 июл', city:'🦌 Нара (из Осаки)', events:[
+    {icon:'🦌',title:'Олени в парке Нара',desc:'30 мин электричкой из Осаки',map:'https://maps.app.goo.gl/qcAEdRnuME3ViqY46'},
+    {icon:'🏯',title:'Тодай-дзи — самый большой храм',desc:'Деревянный буддийский храм'},
+    {icon:'🍜',title:'Уличная еда Осака вечером',desc:'Такояки, окономияки, имаяки'}
+  ]},
+  { day:13, date:'24 июл', city:'🎢 Осака — Universal Studios', events:[
+    {icon:'🎢',title:'Universal Studios Japan',desc:'Nintendo World, Гарри Поттер',map:'https://maps.app.goo.gl/qFUCZtXnSiJUoL2H7'},
+    {icon:'🎡',title:'Полный день в парке',desc:'Купить билеты заранее онлайн'}
+  ]},
+  { day:14, date:'25 июл', city:'🛍️ Осака — шопинг', events:[
+    {icon:'🛍️',title:'Синсайбаси и Америка-Мура',desc:'Японская уличная мода'},
+    {icon:'🍱',title:'Курокомон рынок',desc:'Морепродукты и кулинария'},
+    {icon:'🌆',title:'Смотровая Умэда Скай Билдинг',desc:'Панорама 360°'}
+  ]},
+  { day:15, date:'26 июл', city:'🚄 Осака → Хиросима', events:[
+    {icon:'🚄',title:'Синкансэн в Хиросиму',desc:'~1ч 20мин по JR Pass'},
+    {icon:'🕊️',title:'Мемориальный парк мира',desc:'Купол Гэнбаку, Музей мира',map:'https://maps.app.goo.gl/8TREt9VG4W7KaBqB6'},
+    {icon:'🌙',title:'Прогулка по вечерней Хиросиме',desc:''}
+  ]},
+  { day:16, date:'27 июл', city:'⛩️ Остров Миядзима', events:[
+    {icon:'⛩️',title:'Тории Ицукусима в море',desc:'Прибыть на закате — магия',map:'https://maps.app.goo.gl/6aGzA3JBrZXY4gTy5'},
+    {icon:'🦌',title:'Олени на острове',desc:'Дикие, как в Наре'},
+    {icon:'🏯',title:'Святилище Ицукусима',desc:'Объект Всемирного наследия ЮНЕСКО'}
+  ]},
+  { day:17, date:'28 июл', city:'✈️ Вылет домой', events:[
+    {icon:'🛍️',title:'Последний шопинг в аэропорту',desc:'Дьюти-фри, японские сладости'},
+    {icon:'🛫',title:'Вылет из Хиросимы / Осаки / Токио',desc:'Проверить маршрут возврата'},
+    {icon:'🏠',title:'Возвращение домой',desc:'С полными чемоданами воспоминаний 🌸'}
+  ]}
+];
+
+function buildItinerary() {
+  const container = document.getElementById('days-container');
+  days.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'day-card';
+    div.innerHTML = `
+      <div class="day-header" onclick="toggleDay(this)">
+        <span class="day-num">День ${d.day}</span>
+        <span class="day-city">${d.city}</span>
+        <span class="day-date">${d.date}</span>
+        <span class="day-chevron">▾</span>
+      </div>
+      <div class="day-body">
+        ${d.events.map(e => `
+          <div class="event">
+            <div class="event-icon">${e.icon}</div>
+            <div class="event-info">
+              <h4>${e.title}</h4>
+              <p>${e.desc}</p>
+              ${e.map ? `<a href="${e.map}" target="_blank" class="map-link">📍 Карта →</a>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function toggleDay(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+
+// ===== CHECKLIST =====
+const checklistData = {
+  '📄 Документы': [
+    'Загранпаспорт (срок >6 мес после въезда)',
+    'Виза в Японию (оформить заранее)',
+    'Распечатка брони отелей',
+    'Распечатка маршрута',
+    'Страховой полис (распечатать)',
+    'Медицинская справка (при необходимости)',
+    'Копии всех документов (хранить отдельно)',
+    'Контакты посольства России в Японии'
+  ],
+  '💳 Деньги': [
+    'Наличные иены (минимум 30 000 ¥ при въезде)',
+    'Рублёвая карта с конвертацией',
+    'Долларовая / евровая карта (резерв)',
+    'JR Pass (купить и обменять в аэропорту)',
+    'Карта Suica / Pasmo для метро'
+  ],
+  '🎒 Вещи и техника': [
+    'Адаптер для розеток (тип A — японский)',
+    'Павербанк (заряженный)',
+    'Телефон с Google Maps офлайн (JP)',
+    'Наушники',
+    'Лёгкая одежда (30-35°C)',
+    'Дождевик или зонт (июль — сезон дождей)',
+    'Удобные кроссовки для ходьбы',
+    'Солнцезащитный крем SPF50+',
+    'Маленький рюкзак для дней'
+  ],
+  '📱 Приложения': [
+    'Google Translate (скачать офлайн JP)',
+    'Japan Official Travel App',
+    'Hyperdia (поезда)',
+    'Google Maps (офлайн)',
+    'Booking.com / номера брони'
+  ],
+  '🏥 Здоровье': [
+    'Личные лекарства (с запасом)',
+    'Антигистаминные (жара + растения)',
+    'Пластыри и мозольные повязки',
+    'Влажные салфетки'
+  ]
+};
+
+function buildChecklist() {
+  const container = document.getElementById('checklist-container');
+  let allItems = [];
+  Object.entries(checklistData).forEach(([section, items]) => {
+    const saved = JSON.parse(localStorage.getItem('checklist') || '{}');
+    const div = document.createElement('div');
+    div.className = 'check-section';
+    div.innerHTML = `<div class="check-section-title">${section}</div>`;
+    items.forEach((item, i) => {
+      const key = section + i;
+      allItems.push(key);
+      const checked = saved[key] || false;
+      const el = document.createElement('div');
+      el.className = 'check-item' + (checked ? ' done' : '');
+      el.dataset.key = key;
+      el.innerHTML = `<div class="check-box"></div><div class="check-text">${item}</div>`;
+      el.addEventListener('click', () => toggleCheck(el, key));
+      div.appendChild(el);
+    });
+    container.appendChild(div);
+  });
+  updateProgress();
+}
+
+function toggleCheck(el, key) {
+  el.classList.toggle('done');
+  const saved = JSON.parse(localStorage.getItem('checklist') || '{}');
+  saved[key] = el.classList.contains('done');
+  localStorage.setItem('checklist', JSON.stringify(saved));
+  updateProgress();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done');
+  const pct = all.length ? Math.round(done.length / all.length * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Готово: ${done.length} / ${all.length} (${pct}%)`;
+}
+
+// ===== NOTES =====
+function initNotes() {
+  const ta = document.getElementById('personal-notes');
+  ta.value = localStorage.getItem('notes') || '';
+  ta.addEventListener('input', () => {
+    localStorage.setItem('notes', ta.value);
+    const saved = document.getElementById('notes-saved');
+    saved.style.display = 'block';
+    clearTimeout(ta._t);
+    ta._t = setTimeout(() => saved.style.display = 'none', 1500);
+  });
+}
+
+// ===== INIT =====
+buildItinerary();
+buildChecklist();
+initNotes();
+</script>
+</body>
+</html>
