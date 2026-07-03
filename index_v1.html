@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operation J · Japan 2026</title>
+  <style>
+    :root {
+      --bg: #050711;
+      --surface: #101321;
+      --surface-soft: #15192a;
+      --card: #181c30;
+      --accent: #ff4b7b;
+      --accent2: #3f8cff;
+      --accent-teal: #31d4c4;
+      --accent-gold: #f9c851;
+      --text: #f5f7ff;
+      --muted: #8b90b5;
+      --border: #292f4a;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1b2140 0, #050711 60%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-shell {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding-bottom: 32px;
+    }
+
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(5,7,17,0.96);
+      border-bottom: 1px solid rgba(76,87,144,0.6);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      gap: 10px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff 0, #ff4b7b 40%, #6610f2 85%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.08),
+        0 10px 24px rgba(0,0,0,0.7);
+    }
+
+    .logo-mark span {
+      font-size: 13px;
+      font-weight: 800;
+      color: #050711;
+    }
+
+    .logo-main {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .badge-soft {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--accent-teal);
+      background: rgba(49,212,196,0.12);
+      border: 1px solid rgba(49,212,196,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-soft-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-teal);
+      box-shadow: 0 0 0 4px rgba(49,212,196,0.25);
+    }
+
+    .nav-strip {
+      display: flex;
+      gap: 6px;
+      padding: 0 16px 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-strip::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(110,121,180,0.7);
+      padding: 5px 12px;
+      font-size: 12px;
+      background: radial-gradient(circle at top left,#1d2239,#0c0f1f);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease-out;
+    }
+
+    .nav-btn span { font-size: 13px; }
+
+    .nav-btn.active,
+    .nav-btn:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: radial-gradient(circle at top left,#ff4b7b,#3f264b);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.6);
+    }
+
+    .hero {
+      padding: 20px 16px 10px;
+    }
+
+    .hero-inner {
+      border-radius: 22px;
+      padding: 18px 16px 20px;
+      border: 1px solid rgba(92,104,170,0.8);
+      background:
+        radial-gradient(circle at 0 0, rgba(255,75,123,0.22) 0, transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(63,140,255,0.22) 0, transparent 60%),
+        linear-gradient(135deg,#151a2d,#070915);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .hero-flag {
+      font-size: 32px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8));
+    }
+
+    .hero-title-block {
+      flex: 1;
+    }
+
+    .hero-title {
+      font-size: clamp(22px, 4vw, 28px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg,#fff,#f9c851,#ff4b7b);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero-sub {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-meta-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-pill {
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      background: rgba(8,11,26,0.9);
+      border: 1px solid rgba(98,110,177,0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #e1e5ff;
+    }
+
+    .hero-pill strong {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .hero-tagline {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-row {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .stat-block {
+      min-width: 72px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .stat-value span {
+      color: var(--accent-teal);
+    }
+
+    .hero-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .section {
+      display: none;
+      margin: 10px 16px 0;
+    }
+
+    .section.active { display: block; }
+
+    .section-inner {
+      border-radius: 20px;
+      padding: 16px 14px 20px;
+      background: linear-gradient(150deg,#0b0f1d,#050711);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.7);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span {
+      font-size: 18px;
+    }
+
+    .section-caption {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Overview */
+
+    .overview-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .overview-route {
+      border-radius: 16px;
+      padding: 12px;
+      background: radial-gradient(circle at top left,#1d2236,#101321);
+      border:1px solid rgba(82,93,154,0.8);
+    }
+
+    .overview-route-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .timeline-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .timeline-chip {
+      min-width: 52px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .chip-tokyo { background: rgba(63,140,255,0.18); border:1px solid rgba(63,140,255,0.7); color:#96b8ff; }
+    .chip-nachi { background: rgba(255,75,123,0.18); border:1px solid rgba(255,75,123,0.7); color:#ff9ab9; }
+    .chip-kyoto { background: rgba(249,200,81,0.16); border:1px solid rgba(249,200,81,0.7); color:#f9c851; }
+    .chip-osaka { background: rgba(49,212,196,0.16); border:1px solid rgba(49,212,196,0.7); color:#7be3d5; }
+    .chip-auto  { background: rgba(186,104,255,0.18); border:1px solid rgba(186,104,255,0.7); color:#d3b3ff; }
+
+    .timeline-text {
+      flex:1;
+      color:#e3e6ff;
+    }
+    .timeline-text small {
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    .note-card {
+      border-radius:16px;
+      padding:10px 12px;
+      background:#111526;
+      border:1px dashed rgba(139,144,181,0.8);
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .note-card strong { color:#f0f2ff; }
+
+    .quick-actions {
+      margin-top: 10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .pill-btn {
+      border-radius:999px;
+      border:1px solid rgba(102,113,173,0.8);
+      padding:5px 10px;
+      font-size:12px;
+      background:#080b1b;
+      color:#e1e5ff;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+    }
+
+    .pill-btn span { font-size:13px; }
+
+    .pill-btn.primary {
+      border-color:var(--accent);
+      background:linear-gradient(130deg,#ff4b7b,#e83e8c,#f9c85133);
+      color:#fff;
+    }
+
+    /* Itinerary */
+
+    .day-card {
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:radial-gradient(circle at top,#1c2137,#101321);
+      margin-bottom:8px;
+      overflow:hidden;
+    }
+
+    .day-header {
+      padding:8px 11px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+    }
+
+    .day-badge {
+      min-width:70px;
+      font-size:11px;
+      font-weight:600;
+      border-radius:999px;
+      padding:4px 8px;
+      text-align:center;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      background:rgba(28,32,54,0.9);
+      border:1px solid rgba(111,124,183,0.9);
+      color:#e2e6ff;
+    }
+
+    .day-main { flex:1; }
+
+    .day-main-title {
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .day-main-date {
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    .day-chevron {
+      font-size:16px;
+      color:var(--muted);
+      transition: transform 0.2s;
+    }
+
+    .day-card.open .day-chevron { transform: rotate(180deg); }
+
+    .day-body {
+      display:none;
+      padding: 0 11px 10px;
+      border-top:1px solid rgba(46,52,80,0.9);
+      background:#0d101f;
+    }
+
+    .day-card.open .day-body { display:block; }
+
+    .event {
+      display:flex;
+      gap:8px;
+      padding:7px 0;
+      border-bottom:1px solid rgba(26,31,54,0.9);
+    }
+
+    .event:last-child { border-bottom:none; }
+
+    .event-icon {
+      width:24px;
+      text-align:center;
+      font-size:18px;
+    }
+
+    .event-main h4 {
+      font-size:13px;
+      margin-bottom:2px;
+    }
+
+    .event-main p {
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .map-link {
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:11px;
+      color:var(--accent-teal);
+      margin-top:3px;
+    }
+
+    /* Weather */
+
+    .weather-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .weather-card {
+      border-radius:14px;
+      padding:8px 9px;
+      background:#111526;
+      border:1px solid rgba(47,55,90,0.9);
+      font-size:12px;
+    }
+
+    .weather-city {
+      font-size:13px;
+      font-weight:600;
+      margin-bottom:2px;
+    }
+
+    .weather-main {
+      font-size:13px;
+      color:#e3e6ff;
+    }
+
+    .weather-note {
+      font-size:11px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    /* Checklist */
+
+    .checklist-group {
+      margin-bottom:10px;
+      border-radius:14px;
+      padding:8px 10px;
+      background:#111526;
+      border:1px solid rgba(47,55,90,0.9);
+    }
+
+    .checklist-title {
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      margin-bottom:4px;
+    }
+
+    .check-item {
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      padding:5px 0;
+      cursor:pointer;
+    }
+
+    .check-circle {
+      width:18px;
+      height:18px;
+      border-radius:7px;
+      border:2px solid rgba(81,93,145,0.9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      color:var(--accent-teal);
+    }
+
+    .check-item.done .check-circle {
+      background:var(--accent-teal);
+      border-color:var(--accent-teal);
+      color:#050711;
+    }
+
+    .check-text {
+      font-size:12px;
+      color:#e1e5ff;
+    }
+
+    .check-item.done .check-text {
+      color:var(--muted);
+      text-decoration:line-through;
+    }
+
+    .progress-line-wrap {
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .progress-line {
+      flex:1;
+      height:6px;
+      border-radius:999px;
+      background:#252b44;
+      overflow:hidden;
+    }
+
+    .progress-fill {
+      height:100%;
+      width:0%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,#31d4c4,#f9c851);
+      transition:width 0.2s ease-out;
+    }
+
+    /* Notes */
+
+    .note-preset {
+      border-radius:14px;
+      padding:8px 10px;
+      background:#111526;
+      border-left:3px solid var(--accent-teal);
+      margin-bottom:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .note-preset strong { color:#f0f2ff; }
+
+    .notes-area {
+      margin-top:8px;
+      width:100%;
+      border-radius:14px;
+      padding:8px 10px;
+      border:1px solid rgba(54,64,108,0.9);
+      background:#050711;
+      color:var(--text);
+      font-size:13px;
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .notes-area:focus {
+      outline:none;
+      border-color:var(--accent-teal);
+    }
+
+    .notes-saved {
+      margin-top:3px;
+      font-size:11px;
+      color:var(--accent-teal);
+      display:none;
+    }
+
+    /* Cities */
+
+    .city-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:8px;
+    }
+
+    .city-card {
+      border-radius:16px;
+      padding:10px 10px;
+      background:#111526;
+      border:1px solid rgba(47,55,90,0.9);
+      font-size:12px;
+      position:relative;
+    }
+
+    .city-icon { font-size:22px; margin-bottom:4px; }
+
+    .city-name { font-size:14px; font-weight:600; }
+
+    .city-meta { font-size:11px; color:var(--muted); margin-bottom:4px; }
+
+    .city-tags {
+      display:flex;
+      flex-wrap:wrap;
+      gap:4px;
+      margin-top:4px;
+    }
+
+    .city-tag {
+      font-size:11px;
+      border-radius:999px;
+      padding:2px 7px;
+      border:1px solid rgba(80,92,150,0.9);
+      color:#d0d4ff;
+    }
+
+    .city-nights {
+      position:absolute;
+      top:8px;
+      right:8px;
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    /* Maps */
+
+    .maps-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:8px;
+    }
+
+    .map-card {
+      border-radius:16px;
+      padding:10px 10px;
+      background:#111526;
+      border:1px solid rgba(47,55,90,0.9);
+      font-size:12px;
+      display:block;
+    }
+
+    .map-title { font-size:13px; font-weight:600; margin-bottom:2px; }
+
+    .map-desc { font-size:11px; color:var(--muted); }
+
+    .map-arrow {
+      margin-top:4px;
+      font-size:12px;
+      color:var(--accent-teal);
+    }
+
+    @media (max-width: 600px) {
+      .hero-inner { padding:14px 12px 18px; }
+      .section-inner { padding:14px 12px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">
+        <div class="logo-mark"><span>J</span></div>
+        <div>
+          <div class="logo-main">Operation J</div>
+          <div class="logo-sub">Japan · July 12–28, 2026</div>
+        </div>
+      </div>
+      <div class="badge-soft">
+        <span class="badge-soft-dot"></span>
+        <span>Itinerary v2</span>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <button class="nav-btn active" data-section="overview"><span>🏠</span>Обзор</button>
+      <button class="nav-btn" data-section="itinerary"><span>📅</span>Маршрут</button>
+      <button class="nav-btn" data-section="weather"><span>🌡️</span>Погода</button>
+      <button class="nav-btn" data-section="checklist"><span>✅</span>Чек‑листы</button>
+      <button class="nav-btn" data-section="cities"><span>🏙️</span>Города</button>
+      <button class="nav-btn" data-section="maps"><span>🗺️</span>Карты</button>
+      <button class="nav-btn" data-section="notes"><span>📝</span>Заметки</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-header">
+        <div class="hero-flag">🇯🇵</div>
+        <div class="hero-title-block">
+          <div class="hero-title">Operation J · Japan 2026</div>
+          <div class="hero-sub">
+            17‑дневный маршрут: Токио → Nachi → Киото → Осака → авто‑блок (дрифт, Фудзи, Йокогама) → Tenjin Matsuri → финальный Токио. План взят из Operation_J_v9 [file:92].
+          </div>
+          <div class="hero-meta-row">
+            <div class="hero-pill"><strong>12–28 июля</strong><span> · 17 дней</span></div>
+            <div class="hero-pill"><strong>Nachi, Gion, Tenjin</strong><span> · главные якоря</span></div>
+            <div class="hero-pill"><strong>20.07</strong><span> · Tokyo Drift</span></div>
+          </div>
+          <div class="hero-tagline">
+            Мягкий вход, ритуальный юг, фестивальный Киото и Осака, авто‑блок под Токио, Tenjin Matsuri и Камакура с Skytree перед вылетом [file:92].
+          </div>
+        </div>
+      </div>
+      <div class="hero-row">
+        <div class="stat-block">
+          <div class="stat-label">Дни</div>
+          <div class="stat-value"><span>17</span></div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label">Фестивали</div>
+          <div class="stat-value"><span>3</span>+</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label">Авто‑дни</div>
+          <div class="stat-value"><span>3</span></div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label">Города</div>
+          <div class="stat-value"><span>7</span></div>
+        </div>
+      </div>
+      <div class="hero-note">
+        Вся логика дней: «не геройствовать после перелётов и фестивалей, авто‑часть цельная, а не разорванная» — как прописано в Operation_J_v9 [file:92].
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="section active">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>🏠</span>Обзор</div>
+        <div class="section-caption">Блоки маршрута одним взглядом</div>
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-route">
+          <div class="overview-route-title">Маршрут по блокам</div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-tokyo">12–13</div>
+            <div class="timeline-text">
+              <strong>Токио — мягкий вход</strong>
+              <small>Прилёт, Shinjuku/Kabukicho, лёгкий город и переезд в Киото.</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-nachi">14–15</div>
+            <div class="timeline-text">
+              <strong>Nachi Fire Festival</strong>
+              <small>Kyoto → Kii‑Katsuura, водопад Nachi и огненный фестиваль [file:92].</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-kyoto">15–17</div>
+            <div class="timeline-text">
+              <strong>Gion Matsuri</strong>
+              <small>Вечерние Yoiyama, Yasaka Shrine, Kennin‑ji, парад Yamaboko Junko [file:92].</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-osaka">18</div>
+            <div class="timeline-text">
+              <strong>Культурная Осака</strong>
+              <small>Osaka Castle, Shitenno‑ji, Sumiyoshi Taisha, еда и неон в Dotonbori [file:92].</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-auto">19–22</div>
+            <div class="timeline-text">
+              <strong>Авто‑блок</strong>
+              <small>Переезд под Токио → 20.07 дрифт, 21.07 Fuji+Speedway, 22.07 Yokohama+Umihotaru [file:92].</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-osaka">23–25</div>
+            <div class="timeline-text">
+              <strong>Tenjin Matsuri</strong>
+              <small>Возврат в Осаку, день подготовки, Yoimiya и главный день с лодками и фейерверком [file:92].</small>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-chip chip-tokyo">26–28</div>
+            <div class="timeline-text">
+              <strong>Финальный Токио + Камакура</strong>
+              <small>Optional Formula E, Камакура, Tokyo Station и Skytree перед вылетом [file:92].</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <strong>Смысл:</strong> не убивать себя ради галочек: Onigajo, лишние музеи и Formula E указаны как опционы, а не обязательство [file:92].
+          <br><br>
+          <strong>Жара:</strong> июль в Японии жаркий и влажный (днём 24–33 °C, много дождливых дней), поэтому перерывы и вода — must have [web:109][web:114][web:121].
+        </div>
+
+        <div class="quick-actions">
+          <button class="pill-btn primary" data-section-jump="itinerary"><span>📅</span>Маршрут по дням</button>
+          <button class="pill-btn" data-section-jump="weather"><span>🌡️</span>Погода по городам</button>
+          <button class="pill-btn" data-section-jump="maps"><span>🗺️</span>Карты / Google Maps</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section id="itinerary" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>📅</span>Маршрут</div>
+        <div class="section-caption">Сжатая версия Operation_J_v9</div>
+      </div>
+      <div id="days-container"></div>
+    </div>
+  </section>
+
+  <!-- WEATHER -->
+  <section id="weather" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>🌡️</span>Погода в июле</div>
+        <div class="section-caption">Средние условия, чтобы понимать жару</div>
+      </div>
+
+      <div class="note-card">
+        Июль в Японии — горячий и влажный: днём в центральных регионах 24–33 °C, часто душно и с ливнями [web:109][web:114][web:121].
+        Сильные дожди и грозы тоже возможны, особенно во второй половине месяца [web:109][web:118].
+      </div>
+
+      <div class="weather-grid">
+        <div class="weather-card">
+          <div class="weather-city">Токио</div>
+          <div class="weather-main">днём 28–33 °C, ночью 24–26 °C</div>
+          <div class="weather-note">
+            Жарко и влажно, частые короткие ливни. Лёгкая одежда, вода, полотенце, зонт [web:109][web:119][web:121].
+          </div>
+        </div>
+
+        <div class="weather-card">
+          <div class="weather-city">Киото / Осака</div>
+          <div class="weather-main">днём 29–34 °C, ночью 24–26 °C</div>
+          <div class="weather-note">
+            Внутренняя равнина, жара ощущается сильнее из‑за влажности, особенно на Gion и Tenjin Matsuri [web:111][web:121].
+          </div>
+        </div>
+
+        <div class="weather-card">
+          <div class="weather-city">Nachi / Kii‑Katsuura</div>
+          <div class="weather-main">днём 27–31 °C, влажно</div>
+          <div class="weather-note">
+            Морской климат + горы: душно и влажно, но чуть легче, чем в Киото, зато ливни возможны [web:109][web:121].
+          </div>
+        </div>
+
+        <div class="weather-card">
+          <div class="weather-city">Fuji / горные районы</div>
+          <div class="weather-main">днём 20–26 °C (выше — холоднее)</div>
+          <div class="weather-note">
+            На высоте вокруг Фудзи ощутимо прохладнее: нужна лёгкая ветровка и защита от дождя [web:111][web:121].
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>✅</span>Чек‑листы</div>
+        <div class="section-caption">Билеты, авто‑блок, фестивали</div>
+      </div>
+
+      <div class="progress-line-wrap">
+        <span id="progress-label">Готово: 0 / 0</span>
+        <div class="progress-line">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="checklist-container"></div>
+    </div>
+  </section>
+
+  <!-- CITIES -->
+  <section id="cities" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>🏙️</span>Города</div>
+        <div class="section-caption">Где что происходит</div>
+      </div>
+
+      <div class="city-grid">
+        <div class="city-card">
+          <div class="city-icon">🗼</div>
+          <div class="city-name">Токио</div>
+          <div class="city-meta">12–13, 19–22, 26–28 июля</div>
+          <p class="city-meta">
+            Мягкий вход, авто‑блок, финальный Токио (Tokyo Station, Skytree, Kamakura day‑trip) [file:92].
+          </p>
+          <div class="city-nights">многократно</div>
+          <div class="city-tags">
+            <span class="city-tag">Shinjuku</span>
+            <span class="city-tag">Tokyo Station</span>
+            <span class="city-tag">Skytree</span>
+          </div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-icon">🔥</div>
+          <div class="city-name">Nachi / Kii‑Katsuura</div>
+          <div class="city-meta">14–15 июля</div>
+          <p class="city-meta">
+            Водопад Nachi, Nachi Fire Festival, онсэн и ночёвка в Katsuura [file:92].
+          </p>
+          <div class="city-nights">1 ночь</div>
+          <div class="city-tags">
+            <span class="city-tag">Nachi Falls</span>
+            <span class="city-tag">Nachi no Ogi</span>
+          </div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-icon">⛩️</div>
+          <div class="city-name">Киото</div>
+          <div class="city-meta">13, 15–17 июля</div>
+          <p class="city-meta">
+            База под Nachi и Gion Matsuri: Yasaka Shrine, Kennin‑ji, Yamaboko Junko [file:92].
+          </p>
+          <div class="city-nights">3–4 ночи</div>
+          <div class="city-tags">
+            <span class="city-tag">Gion</span>
+            <span class="city-tag">Yasaka</span>
+          </div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-icon">🦀</div>
+          <div class="city-name">Осака</div>
+          <div class="city-meta">18, 23–26 июля</div>
+          <p class="city-meta">
+            Культура, еда и Tenjin Matsuri — один из главных блоков маршрута [file:92].
+          </p>
+          <div class="city-nights">4+ ночи</div>
+          <div class="city-tags">
+            <span class="city-tag">Osaka Castle</span>
+            <span class="city-tag">Dotonbori</span>
+            <span class="city-tag">Tenjin</span>
+          </div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-icon">🏁</div>
+          <div class="city-name">Авто‑блок под Токио</div>
+          <div class="city-meta">19–22 июля</div>
+          <p class="city-meta">
+            Drift Experience, Fuji Speedway + Mt. Fuji, Yokohama Chinatown и Umihotaru [file:92].
+          </p>
+          <div class="city-nights">3 ночи</div>
+          <div class="city-tags">
+            <span class="city-tag">Drift</span>
+            <span class="city-tag">Fuji</span>
+            <span class="city-tag">Yokohama</span>
+          </div>
+        </div>
+
+        <div class="city-card">
+          <div class="city-icon">🗿</div>
+          <div class="city-name">Камакура</div>
+          <div class="city-meta">27 июля</div>
+          <p class="city-meta">
+            Tsurugaoka Hachimangu, Komachi‑dori и Большой Будда (Kotoku‑in) [file:92].
+          </p>
+          <div class="city-nights">day‑trip</div>
+          <div class="city-tags">
+            <span class="city-tag">Great Buddha</span>
+            <span class="city-tag">Tsurugaoka</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPS -->
+  <section id="maps" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>🗺️</span>Карты / Google Maps</div>
+        <div class="section-caption">Рабочие ссылки</div>
+      </div>
+
+      <div class="maps-grid">
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Shinjuku%20Tokyo" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Токио · Shinjuku / Kabukicho</div>
+          <div class="map-desc">Мягкий вход: бар‑районы и первый вечер.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Tokyo%20Station" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Tokyo Station / Marunouchi</div>
+          <div class="map-desc">Финальные дни, Character Street, шопинг.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Yasaka%20Shrine%20Kyoto" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Kyoto · Yasaka Shrine / Gion</div>
+          <div class="map-desc">База Gion Matsuri.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Kumano%20Nachi%20Taisha" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Nachi · Kumano Nachi Taisha</div>
+          <div class="map-desc">Храм и фестиваль.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Osaka%20Tenmangu" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Осака · Osaka Tenmangu</div>
+          <div class="map-desc">Центр Tenjin Matsuri.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Yokohama%20Chinatown" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Yokohama Chinatown</div>
+          <div class="map-desc">Чайнатаун возле Токио.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Umihotaru%20Parking%20Area" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Tokyo Bay Aqua‑Line / Umihotaru</div>
+          <div class="map-desc">Мост‑тоннель и остановка посреди залива.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+
+        <a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Kotoku-in%20Great%20Buddha%20Kamakura" target="_blank" rel="noopener noreferrer">
+          <div class="map-title">Камакура · Great Buddha</div>
+          <div class="map-desc">Kotoku‑in и окрестности.</div>
+          <div class="map-arrow">→ открыть в Google Maps</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section id="notes" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-title"><span>📝</span>Заметки</div>
+        <div class="section-caption">Чтобы не держать всё в голове</div>
+      </div>
+
+      <div class="note-preset">
+        <strong>Фестивали:</strong> дни до и после Gion / Tenjin оставлены лёгкими специально, чтобы было куда падать, если всё выжало по нулям [file:92].
+      </div>
+      <div class="note-preset">
+        <strong>Авто‑блок:</strong> 19–22 июля — цельный кусок (дрифт → Фудзи → Йокогама). Не рвать его лишними переездами [file:92].
+      </div>
+
+      <textarea id="personal-notes" class="notes-area" placeholder="Сюда можно писать свои пометки: контакты, номера броней, идеи."></textarea>
+      <div id="notes-saved" class="notes-saved">Черновик обновлён (до следующей перезаписи файла).</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Навигация
+  const navButtons = document.querySelectorAll('.nav-btn');
+  const sections = document.querySelectorAll('.section');
+
+  function showSection(id) {
+    sections.forEach(s => s.classList.toggle('active', s.id === id));
+    navButtons.forEach(b => {
+      const target = b.getAttribute('data-section');
+      b.classList.toggle('active', target === id);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-section');
+      if (target) showSection(target);
+    });
+  });
+
+  document.querySelectorAll('[data-section-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-section-jump');
+      if (target) showSection(target);
+    });
+  });
+
+  // Дни (укорочено, но по Operation_J_v9)
+  const days = [
+    { day:1, date:'12 июл (вс)', city:'🛬 Токио — мягкий вход', events:[
+      {icon:'🛬',title:'Прилёт и заселение',desc:'Tokyo airport → отель. Спокойно добираемся, снимаем/меняем деньги, проверяем интернет и карты.'},
+      {icon:'🌃',title:'Kabukicho / Golden Gai',desc:'Первый неон и еда. Без геройства, к 22:30 обратно в отель.'}
+    ]},
+    { day:2, date:'13 июл (пн)', city:'🚄 Токио → Киото', events:[
+      {icon:'☕',title:'Утро в Токио',desc:'Завтрак, SIM/наличка, магазины первой необходимости. Фудзи сюда НЕ ставим.'},
+      {icon:'🏙️',title:'Лёгкий город',desc:'Asakusa / Marunouchi / Shinjuku — по настроению.'},
+      {icon:'🚄',title:'Шинкансен в Киото',desc:'Tokaido Shinkansen (SmartEX), Tokyo/Shinagawa → Kyoto.'}
+    ]},
+    { day:3, date:'14 июл (вт)', city:'🔥 Nachi Fire Festival', events:[
+      {icon:'🚆',title:'Kyoto → Kii‑Katsuura',desc:'Limited Express Kuroshio, ~4 часа пути.'},
+      {icon:'🌊',title:'Nachi Falls',desc:'Водопад как обязательная часть дня, а не опция.'},
+      {icon:'🔥',title:'Nachi no Ogi Matsuri',desc:'Огненный фестиваль при Kumano Nachi Taisha.'},
+      {icon:'♨️',title:'Онсэн / рёкан',desc:'Ночёвка в Katsuura Onsen, не возвращаемся в Киото.'}
+    ]},
+    { day:4, date:'15 июл (ср)', city:'⛩️ Возврат в Киото', events:[
+      {icon:'🚆',title:'Назад в Киото',desc:'Kuroshio обратно.'},
+      {icon:'😴',title:'Recovery',desc:'Душ, сон, поздний обед.'},
+      {icon:'🏮',title:'Gion Matsuri вечер',desc:'Yoiyoiyama: фонари, повозки, еда.'}
+    ]},
+    { day:5, date:'16 июл (чт)', city:'🐉 Yasaka / Kennin‑ji / Гион', events:[
+      {icon:'⛩️',title:'Yasaka Shrine',desc:'Старт дня от святыни фестиваля.'},
+      {icon:'🐉',title:'Kennin‑ji',desc:'Храм с Twin Dragons.'},
+      {icon:'🏮',title:'Gion Matsuri Yoiyama',desc:'Вечерняя часть перед парадом.'}
+    ]},
+    { day:6, date:'17 июл (пт)', city:'🎎 Gion Parade', events:[
+      {icon:'🪑',title:'Место заранее',desc:'Платные места или бордюр, приходим рано.'},
+      {icon:'🎎',title:'Yamaboko Junko',desc:'Главный парад.'}
+    ]},
+    { day:7, date:'18 июл (сб)', city:'🏯 Киото → Осака', events:[
+      {icon:'🚆',title:'Переезд',desc:'Kyoto → Osaka.'},
+      {icon:'🏯',title:'Osaka Castle',desc:'Классический замок.'},
+      {icon:'🍢',title:'Dotonbori',desc:'Такояки, окономияки, неон.'}
+    ]},
+    { day:8, date:'19 июл (вс)', city:'🚄 Осака → Tokyo/Chiba', events:[
+      {icon:'🚄',title:'Переезд к авто‑блоку',desc:'Shin‑Osaka → Tokyo/Chiba.'},
+      {icon:'📄',title:'Проверка дрифта',desc:'Права, страховка, депозит.'}
+    ]},
+    { day:9, date:'20 июл (пн)', city:'🏁 Tokyo Drift Experience', events:[
+      {icon:'🏁',title:'Briefing',desc:'Подготовка и safety.'},
+      {icon:'🚗',title:'6 часов боком',desc:'Основной день.'}
+    ]},
+    { day:10, date:'21 июл (вт)', city:'🗻 Fuji Speedway + Фудзи', events:[
+      {icon:'🗻',title:'Tour Fuji+Speedway',desc:'Частный тур вокруг Фудзи.'}
+    ]},
+    { day:11, date:'22 июл (ср)', city:'🌊 Yokohama + Umihotaru', events:[
+      {icon:'🥟',title:'Yokohama Chinatown',desc:'Еда и прогулка.'},
+      {icon:'🚌',title:'Aqua‑Line / Umihotaru',desc:'Автобус/auto через залив.'}
+    ]},
+    { day:12, date:'23 июл (чт)', city:'🚄 Токио → Осака', events:[
+      {icon:'🚄',title:'Шинкансен в Осаку',desc:'Tokyo → Shin‑Osaka.'}
+    ]},
+    { day:13, date:'24 июл (пт)', city:'🏮 Tenjin Matsuri Eve', events:[
+      {icon:'⛩️',title:'Osaka Tenmangu',desc:'Первый день фестиваля.'}
+    ]},
+    { day:14, date:'25 июл (сб)', city:'🎆 Tenjin Matsuri Main', events:[
+      {icon:'🚤',title:'Лодки и фейерверк',desc:'Funatogyo и салют.'}
+    ]},
+    { day:15, date:'26 июл (вс)', city:'🚄 Осака → Токио', events:[
+      {icon:'🚄',title:'Назад в Токио',desc:'Shin‑Osaka → Tokyo.'}
+    ]},
+    { day:16, date:'27 июл (пн)', city:'🗿 Камакура + Skytree', events:[
+      {icon:'🗿',title:'Kamakura day‑trip',desc:'Tsurugaoka, Komachi‑dori, Great Buddha.'},
+      {icon:'🌃',title:'Tokyo Skytree',desc:'Финальный вид на город.'}
+    ]},
+    { day:17, date:'28 июл (вт)', city:'✈️ Вылет', events:[
+      {icon:'🧳',title:'Сбор вещей',desc:'Проверка документов, сувениров.'},
+      {icon:'🚖',title:'Аэропорт',desc:'Haneda / Narita.'}
+    ]}
+  ];
+
+  function buildItinerary() {
+    const container = document.getElementById('days-container');
+    if (!container) return;
+    container.innerHTML = '';
+    days.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'day-card';
+      card.innerHTML = `
+        <div class="day-header">
+          <div class="day-badge">День ${d.day}</div>
+          <div class="day-main">
+            <div class="day-main-title">${d.city}</div>
+            <div class="day-main-date">${d.date}</div>
+          </div>
+          <div class="day-chevron">▾</div>
+        </div>
+        <div class="day-body">
+          ${d.events.map(e => `
+          <div class="event">
+            <div class="event-icon">${e.icon}</div>
+            <div class="event-main">
+              <h4>${e.title}</h4>
+              <p>${e.desc || ''}</p>
+            </div>
+          </div>`).join('')}
+        </div>
+      `;
+      card.querySelector('.day-header').addEventListener('click', () => {
+        card.classList.toggle('open');
+      });
+      container.appendChild(card);
+    });
+  }
+
+  // Чек‑листы
+  const checklistData = {
+    'Транспорт': [
+      'Авиабилеты туда‑обратно (12–28 июля)',
+      'Shinkansen Tokyo → Kyoto (13.07, SmartEX)',
+      'JR Kuroshio Kyoto ↔ Kii‑Katsuura (14–15.07, e5489)',
+      'Shinkansen Osaka ↔ Tokyo/Chiba (19, 23, 26 июля)'
+    ],
+    'Авто‑блок': [
+      'Tokyo Drift Experience (20.07, права/страховка/депозит)',
+      'Fuji Speedway + Mt. Fuji tour (21.07, pickup и время)',
+      'Автобус/авто на Tokyo Bay Aqua‑Line / Umihotaru (22.07)'
+    ],
+    'Фестивали и Tokyo': [
+      'Gion Matsuri paid seats (если будут, 17.07)',
+      'Tenjin Matsuri viewing / места у реки (25.07)',
+      'Tokyo Skytree билеты (27.07 вечер)'
+    ]
+  };
+
+  function buildChecklist() {
+    const container = document.getElementById('checklist-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    let total = 0;
+    Object.values(checklistData).forEach(list => total += list.length);
+    let done = 0;
+
+    Object.entries(checklistData).forEach(([group, items]) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'checklist-group';
+      wrap.innerHTML = `<div class="checklist-title">${group}</div>`;
+      items.forEach(txt => {
+        const item = document.createElement('div');
+        item.className = 'check-item';
+        item.innerHTML = `
+          <div class="check-circle">–</div>
+          <div class="check-text">${txt}</div>
+        `;
+        item.addEventListener('click', () => {
+          item.classList.toggle('done');
+          done = document.querySelectorAll('.check-item.done').length;
+          updateProgress(done, total);
+        });
+        wrap.appendChild(item);
+      });
+      container.appendChild(wrap);
+    });
+
+    updateProgress(done, total);
+  }
+
+  function updateProgress(done, total) {
+    const label = document.getElementById('progress-label');
+    const fill = document.getElementById('progress-fill');
+    if (!label || !fill || total === 0) return;
+    label.textContent = `Готово: ${done} / ${total}`;
+    const pct = Math.round(done / total * 100);
+    fill.style.width = pct + '%';
+  }
+
+  // Заметки — просто подсветка "сохранено"
+  const notes = document.getElementById('personal-notes');
+  const notesSaved = document.getElementById('notes-saved');
+  if (notes && notesSaved) {
+    notes.addEventListener('input', () => {
+      notesSaved.style.display = 'block';
+      setTimeout(() => { notesSaved.style.display = 'none'; }, 1500);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildItinerary();
+    buildChecklist();
+    showSection('overview');
+  });
+</script>
+</body>
+</html>
